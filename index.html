@@ -1,113 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riya Laheja - Personal Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riya Laheja</title>
+<meta name="description" content="Riya Laheja — high school builder working across chemistry, hardware, and machine learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+/* Layout idea: a single-column engineering logbook — mono coordinate labels in a left rail,
+   build stories in a serif body, industrial display headings, faint graph-paper only in the hero. */
+:root{
+  --bg:#e9ecf1; --panel:#ffffff; --ink:#14181f; --muted:#596273;
+  --line:#ced5df; --grid:rgba(20,24,31,.055); --accent:#1f39d6; --accent-soft:rgba(31,57,214,.10);
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Newsreader',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1119; --panel:#151a26; --ink:#e9edf4; --muted:#99a3b6;
+  --line:#273041; --grid:rgba(255,255,255,.045); --accent:#6f88ff; --accent-soft:rgba(111,136,255,.15);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0e1119; --panel:#151a26; --ink:#e9edf4; --muted:#99a3b6;
+  --line:#273041; --grid:rgba(255,255,255,.045); --accent:#6f88ff; --accent-soft:rgba(111,136,255,.15);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--body); font-size:18px; line-height:1.6;
+  font-variant-ligatures:common-ligatures; text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%}
+a{color:inherit}
+.wrap{
+  max-width:860px; margin:0 auto;
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+}
+.mono{font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+
+/* ---- top bar ---- */
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:18px}
+.topbar .sig{font-family:var(--mono); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.themebtn{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); background:transparent; border:1px solid var(--line); border-radius:999px;
+  padding:7px 12px; cursor:pointer;
+}
+.themebtn:hover{color:var(--ink); border-color:var(--accent)}
+.themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ---- hero ---- */
+.hero{
+  position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px; background-position:center top;
+}
+.hero-in{padding-block:52px 46px}
+.eyebrow{margin:0 0 20px}
+.hero h1{
+  font-family:var(--display); font-weight:800; font-size:clamp(2.9rem,11vw,5.2rem);
+  line-height:.96; letter-spacing:-.02em; margin:0; text-wrap:balance;
+}
+.hero .lead{
+  font-size:clamp(1.15rem,3.4vw,1.5rem); line-height:1.4; margin:22px 0 0; max-width:30ch; color:var(--ink);
+}
+.status{
+  display:inline-flex; align-items:center; gap:9px; margin-top:26px;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+  border:1px solid var(--line); border-radius:999px; padding:7px 13px 7px 11px; background:var(--panel);
+  max-width:100%;
+}
+.status b{color:var(--ink); font-weight:500; text-transform:none; letter-spacing:0; font-family:var(--body); font-size:.92rem}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none; animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ---- generic section ---- */
+section{padding-block:46px; border-bottom:1px solid var(--line)}
+.lbl{display:block; margin:0 0 22px}
+h2{
+  font-family:var(--display); font-weight:700; font-size:clamp(1.35rem,4vw,1.7rem);
+  letter-spacing:-.01em; margin:0 0 14px; text-wrap:balance;
+}
+p{margin:0 0 1em; max-width:65ch}
+p:last-child{margin-bottom:0}
+.note{color:var(--muted); font-size:.95rem}
+
+/* ---- build log ---- */
+.entry{
+  display:grid; grid-template-columns:150px 1fr; gap:10px 28px;
+  padding-block:22px; border-top:1px solid var(--line);
+}
+.entry:first-of-type{border-top:none; padding-top:4px}
+.entry .meta{display:flex; flex-direction:column; gap:4px; min-width:0}
+.entry .meta .kind{font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent)}
+.entry .meta .yr{font-family:var(--mono); font-size:.7rem; letter-spacing:.05em; color:var(--muted)}
+.entry .body{min-width:0}
+.entry h3{font-family:var(--display); font-weight:600; font-size:1.18rem; margin:0 0 6px; letter-spacing:-.01em}
+.entry h3 .wip{
+  font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);
+  border:1px solid var(--accent); border-radius:4px; padding:2px 5px; margin-left:9px; vertical-align:middle; white-space:nowrap;
+}
+.entry p{font-size:1rem; line-height:1.55; margin:0}
+.entry .lk{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em; margin-top:8px; display:inline-block; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+.entry .lk:hover{border-bottom-color:var(--accent)}
+
+/* ---- life grid ---- */
+.life{display:grid; grid-template-columns:repeat(2,1fr); gap:20px 28px}
+.life .item .hd{font-family:var(--display); font-weight:600; font-size:1.02rem; margin:0 0 3px}
+.life .item p{font-size:.98rem; line-height:1.5; margin:0; color:var(--muted)}
+
+/* ---- wins ---- */
+.wins{display:grid; gap:0}
+.win{
+  display:grid; grid-template-columns:1fr auto; gap:14px 20px; align-items:baseline;
+  padding-block:13px; border-top:1px solid var(--line);
+}
+.win:first-child{border-top:none}
+.win .what{font-size:1.02rem}
+.win .what b{font-weight:500}
+.win .tag{font-family:var(--mono); font-size:.72rem; letter-spacing:.03em; color:var(--muted); text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums}
+
+/* ---- contact ---- */
+.links{display:flex; flex-wrap:wrap; gap:10px; margin-top:4px}
+.links a{
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.03em; text-decoration:none; color:var(--ink);
+  border:1px solid var(--line); border-radius:8px; padding:11px 14px; display:inline-flex; align-items:center; gap:8px;
+}
+.links a:hover{border-color:var(--accent); color:var(--accent)}
+.links a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.contactrow{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:20px; font-family:var(--mono); font-size:.82rem; color:var(--muted)}
+.contactrow .addr{color:var(--ink); letter-spacing:.01em}
+.copy{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
+  background:transparent; border:1px solid var(--line); border-radius:6px; padding:5px 9px; color:var(--muted);
+}
+.copy:hover{color:var(--accent); border-color:var(--accent)}
+.copy:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+footer{padding-block:34px}
+footer .mono{display:block}
+
+@media (max-width:620px){
+  body{font-size:17px}
+  .entry{grid-template-columns:1fr; gap:8px}
+  .entry .meta{flex-direction:row; gap:12px; align-items:baseline}
+  .life{grid-template-columns:1fr; gap:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .dot{animation:none; opacity:1}
+  *{scroll-behavior:auto}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="profile.jpg" alt="Riya Laheja" class="profile-pic">
-            <h1 id="name">Riya Laheja</h1>
-            <p>Welcome to my portfolio! Here you can find my accomplishments, projects, and contact details.</p>
-            <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        </header>
-        
-        <div class="tab-container">
-            <a href="index.html" class="tab active">Home</a>
-            <a href="aboutme.html" class="tab">About Me</a>
-            <a href="extracur.html" class="tab">Extracurriculars</a>
-            <a href="school.html" class="tab">Education</a>
-        </div>
-        
-        <section id="about">
-            <h2>About Me</h2>
-            <p>Passionate about applying analytical thinking, technical and computational skills, and creative problem-solving to develop impactful, innovative engineering and software solutions. Areas of interest: Computer Engineering, Artificial Intelligence, Materials Science, Robotics.</p>
-        </section>
-        
-        <section id="skills">
-            <h2>Technical Skills</h2>
-            <ul>
-                <li><b>Programming Languages:</b> Python, C/C++, HTML, CSS, JavaScript</li>
-                <li><b>Tools & Technologies:</b> GitHub, Deepnote, Arduino</li>
-                <li><b>Soft Skills:</b> Problem-solving, teamwork, leadership, communication</li>
-            </ul>
-        </section>
-        
-        <section id="projects">
-            <h2>Projects & Research Experience</h2>
-            <ul>
-                <li><b>AI Sleep Predictor</b> 
-                    <li>Built a machine learning model in Python that predicts optimal sleep hours </li>
-                    <li>Used inputs like age, brain activity, and activity levels to make predictions</li>
-                    <li>Developed and tested it in Deepnote's notebook environment</li>
-                    <li>Handled the full pipeline: cleaning data, training the model, and checking accuracy</li>
-                </li>
-        </li>
-                <li><b>MIT Mantis Lab</b> 
-                    <li>Worked in the Kellis Group at MIT on a data visualization tool</li>
-                    <li>Implemented bubble-sizing controls to scale data points by different variables</li>
-                    <li>Built an agentic workflow to automate parts of the analysis process</li>
-                </li>
-                <li><b>Arduino Circuit Projects</b> 
-                    <li> Designed, wired, and programmed multiple interactive electronics projects at Storming Robots </li>
-                    <li>Took each project from circuit diagram to working build</li>
-                    <li>Combined hardware assembly with the code controlling sensors and motors</li>
-                </li>
-                <li><b>GitHub Portfolio</b> 
-                    <li>Maintain a set of public repositories spanning machine learning, hardware, and web projects</li>
-                    <li> Write documentation and READMEs so others can follow and run the work </li>
-                </li>
-                <li><b>Inspirit AI</b> 
-                    <li>Trained and evaluated machine learning models in Python using Google Colab </li>
-                    <li>Worked through feeding in data, tuning the model, and measuring performance</li>
-                </li>
-            </ul>
-        </section>
-        
-        <section id="enrichment">
-            <h2>Academic Enrichment Programs</h2>
-            <ul>
-                <li><b>Columbia University Science Honors Program (SHP)</b> 
-                    <li>Selected into Columbia's competitive weekend STEM program for high schoolers</li>
-                    <li>Completed 2 courses: Bioengineering Design, Applied Data Structures in Python</li>
-                    <li>In Applied Data Structures in Python, learned how to organize and manipulate data using structures like lists, stacks, queues, dictionaries, and trees, and how the choice of structure affects efficiency</li>
-                    <li>Practiced writing cleaner, more efficient algorithms and thinking about time and space tradeoffs</li>
-                    <li>In Bioengineering Design, explored how engineering principles apply to biological and medical problems, from designing solutions to evaluating how they perform</li>
-                </li>
-                <li><b>BWSI MIT Spring Program</b> 
-                <li>Completed two courses: Aspiring Engineers and Digital Logic and Computer Design</li>
-                <li>In Aspiring Engineers, explored AI, machine learning, and internet infrastructure, and got hands-on with web hosting and collaboration tools like GitHub and Deepnote</li>
-                <li>In Digital Logic and Computer Design, worked through the Nand2Tetris approach, building a computer from the ground up starting with basic logic gates</li>
-                <li>Learned how simple gates like AND, OR, and NOT combine into adders, multiplexers, and other building blocks, then built up to an ALU, memory, and the core pieces of a working CPU</li>
-                <li><b>Girls Who Code Pathways Program</b> 
-                    <li>Learned cybersecurity, web development, and machine learning </li>
-                    <li>Built hands-on projects in Python, HTML, CSS, and JavaScript</li>
-                    <li>Capped by an immersion experience at JP Morgan</li>
-                </li>
-            </ul>
-        </section>
-        
-        <section id="links">
-            <h2>Links</h2>
-            <ul>
-                <li><a href="https://github.com/Coder2028-tech" target="_blank">GitHub Profile</a></li>
-                <li><a href="Resume Riya Vazirani Laheja (CV) - shortened (1).pdf" target="_blank">My Resume</a></li>
-            </ul>
-        </section>
-        
-        <footer>
-            <p>Contact me at: <span id="email">riya.v.laheja@gmail.com</span> | <span id="phone">908-295-7799</span></p>
-            <p>Basking Ridge, NJ | <a href="https://github.com/Coder2028-tech" target="_blank">GitHub</a></p>
-        </footer>
+<div class="wrap">
+  <div class="topbar">
+    <span class="sig">R.L. — portfolio</span>
+    <button class="themebtn" id="theme" type="button" aria-label="Switch color theme">Theme</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <p class="mono eyebrow">Ridge High School &middot; Basking Ridge, NJ</p>
+    <h1>Riya Laheja</h1>
+    <p class="lead">I like taking an idea from a circuit diagram to something that actually runs.</p>
+    <span class="status"><span class="dot" aria-hidden="true"></span><span class="mono" style="color:var(--muted)">Currently</span> <b>building a four-legged walking robot</b></span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <span class="lbl mono">How I work</span>
+    <h2>I like problems that sit between fields</h2>
+    <p>Chemistry taught me to reason carefully about what is actually happening. Hardware taught me that a clever idea still has to survive contact with a breadboard. Machine learning is where I spend the most time, usually cleaning messy data until a model has something real to learn from.</p>
+    <p>What ties it together is that I would rather get one thing working end to end than get any single piece perfect. Most of what I have built started as a question I could not stop poking at.</p>
+  </section>
+
+  <section>
+    <span class="lbl mono">What I've built</span>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">Independent research</span><span class="yr">PyTorch</span></div>
+      <div class="body">
+        <h3>BloomCast</h3>
+        <p>A model that forecasts harmful algae blooms in New Jersey lakes. I pulled together a few different kinds of data, satellite imagery, water measurements, and weather, and trained a multimodal deep-learning model in PyTorch to predict where blooms are likely to show up. It is the project I have put the most of myself into.</p>
+      </div>
     </div>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">Robotics</span><span class="yr">Columbia SHAPE</span></div>
+      <div class="body">
+        <h3>Quadruped walking robot <span class="wip">in progress</span></h3>
+        <p>A four-legged robot I'm building through Columbia's SHAPE program. Right now I am working through the walking gait and balance, and learning how much of robotics is getting the hardware and the code to agree with each other.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">Research · MIT</span><span class="yr">Kellis Group</span></div>
+      <div class="body">
+        <h3>Data-viz tool at the Kellis Lab</h3>
+        <p>A summer working on a data-visualization tool, including the controls that size each bubble by its value, and a small agentic workflow I built to automate parts of the analysis. It was my first time writing code that other researchers would actually use.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">App</span><span class="yr">2024</span></div>
+      <div class="body">
+        <h3>SymptoScan</h3>
+        <p>An app that helps people make sense of symptoms before they panic or ignore something. It earned an Honorable Mention in the Congressional App Challenge.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">Hardware</span><span class="yr">Storming Robots</span></div>
+      <div class="body">
+        <h3>Arduino circuit builds</h3>
+        <p>A run of circuit projects, each taken from a schematic to a working build. This is where I got comfortable debugging hardware instead of just code, which turns out to be a very different kind of patience.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="meta"><span class="kind">Machine learning</span><span class="yr">Python</span></div>
+      <div class="body">
+        <h3>AI Sleep Predictor</h3>
+        <p>An early project predicting someone's ideal amount of sleep from things like age and activity level. It was the first time I did the whole loop myself: cleaning the data, training the model, and checking honestly whether it was any good.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="lbl mono">Beyond the screen</span>
+    <div class="life">
+      <div class="item"><p class="hd">Tae Kwon Do</p><p>Second-degree black belt, and I help teach the younger belts.</p></div>      <div class="item"><p class="hd">Teaching</p><p>I run Python, AI, and web workshops for younger kids through Girls Who Code and STEMxx.</p></div>
+      <div class="item"><p class="hd">The Start Small Movement</p><p>A project I co-founded to support women-owned small businesses.</p></div>
+      <div class="item"><p class="hd">Off the clock</p><p>Pickleball and an ongoing weakness for diamond art.</p></div>
+      <div class="item"><p class="hd">Service</p><p>Two gold volunteer pins (250 hours each) through Ridge High School.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="lbl mono">A few things that went well</span>
+    <div class="wins">
+      <div class="win"><span class="what"><b>1st of 366</b> — New Jersey Chemistry League</span><span class="tag">2026</span></div>
+      <div class="win"><span class="what"><b>14th of 276</b> (top 5% in NJ) — Bioleague</span><span class="tag">2026</span></div>
+      <div class="win"><span class="what"><b>1st place</b> — VFW Voice of Democracy (audio essay)</span><span class="tag">2025</span></div>
+      <div class="win"><span class="what"><b>Honorable Mention</b> — Congressional App Challenge</span><span class="tag">SymptoScan</span></div>
+      <div class="win"><span class="what"><b>1st</b> at BRHS Hacks; top 8 &amp; top 10 at Ridge Hackathon</span><span class="tag">2024–2026</span></div>
+      <div class="win"><span class="what"><b>Second-degree black belt</b> — Tae Kwon Do</span><span class="tag">instructor</span></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="lbl mono">Find me / reach me</span>
+    <div class="links">
+      <a href="https://github.com/Coder2028-tech" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://coder2028-tech.github.io/MyWebsite/Resume%20Riya%20Vazirani%20Laheja%20%28CV%29%20-%20shortened%20%281%29.pdf" target="_blank" rel="noopener">Résumé (PDF) ↗</a>
+      <a href="https://thestartsmallmovement.com/" target="_blank" rel="noopener">The Start Small Movement ↗</a>
+    </div>
+    <div class="contactrow">
+      <span class="addr" id="email">riya.v.laheja@gmail.com</span>
+      <button class="copy" id="copyEmail" type="button">Copy</button>
+      <span class="addr">908-295-7799</span>
+    </div>
+  </section>
+
+  <footer>
+    <span class="mono">Riya Laheja &middot; Basking Ridge, NJ</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme');
+  function current(){
+    var set=root.getAttribute('data-theme');
+    if(set) return set;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  btn.addEventListener('click',function(){
+    var next=current()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('riya-theme',next);}catch(e){}
+  });
+  try{var saved=localStorage.getItem('riya-theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+
+  var cp=document.getElementById('copyEmail');
+  cp.addEventListener('click',function(){
+    var txt='riya.v.laheja@gmail.com';
+    function ok(){var o=cp.textContent; cp.textContent='Copied'; setTimeout(function(){cp.textContent=o;},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(ok).catch(select);
+    }else{select();}
+    function select(){
+      var r=document.createRange(); r.selectNode(document.getElementById('email'));
+      var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); ok();
+    }
+  });
+})();
+</script>
 </body>
 </html>
-
-
-
-
-
